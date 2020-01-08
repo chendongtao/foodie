@@ -29,12 +29,14 @@ public class UsersController {
         //2、查询用户名是否存在
         boolean userNameExist = usersService.isUserNameExist(name);
         if (userNameExist){
+            System.out.println("syso输出中文测试是否乱码.....");
             return IMOOCJSONResult.errorMsg("用户名已存在");
         }
         return IMOOCJSONResult.ok();
     }
 
     @PostMapping("/createUsers")
+    @ApiOperation(value = "用户注册",notes = "用户注册")
     public IMOOCJSONResult createUsers(@RequestBody UserBo userBo){
         String username = userBo.getUsername();
         String password = userBo.getPassword();
