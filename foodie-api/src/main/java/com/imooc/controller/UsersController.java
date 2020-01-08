@@ -12,16 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("passport")
 @Api(value = "用户注册",tags = {"用于用户登录注册"})
 public class UsersController {
 
     @Autowired
     private UsersService usersService;
 
-    @GetMapping("/getIsUserNameExist/{username}")
+    @GetMapping("/usernameIsExist")
     @ApiOperation(value = "用户名是否存在",notes = "判断用户名是否存在")
-    public IMOOCJSONResult getIsUserNameExist(@PathVariable(value = "username") String name){
+    public IMOOCJSONResult getIsUserNameExist(@RequestParam("username") String name){
         //1、判断用户名是否为空
         if (StringUtils.isBlank(name)){
             return IMOOCJSONResult.errorMsg("用户名不能为空");
@@ -35,7 +35,7 @@ public class UsersController {
         return IMOOCJSONResult.ok();
     }
 
-    @PostMapping("/createUsers")
+    @PostMapping("/regist")
     @ApiOperation(value = "用户注册",notes = "用户注册")
     public IMOOCJSONResult createUsers(@RequestBody UserBo userBo){
         String username = userBo.getUsername();
