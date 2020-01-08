@@ -4,6 +4,8 @@ import com.imooc.pojo.Users;
 import com.imooc.pojo.bo.UserBo;
 import com.imooc.service.UsersService;
 import com.imooc.utils.IMOOCJSONResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("users")
+@Api(value = "用户注册",tags = {"用于用户登录注册"})
 public class UsersController {
 
     @Autowired
     private UsersService usersService;
 
     @GetMapping("/getIsUserNameExist/{username}")
+    @ApiOperation(value = "用户名是否存在",notes = "判断用户名是否存在")
     public IMOOCJSONResult getIsUserNameExist(@PathVariable(value = "username") String name){
         //1、判断用户名是否为空
         if (StringUtils.isBlank(name)){
