@@ -41,6 +41,11 @@ public class UsersServiceImpl  implements UsersService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Users createUsers(UserBo userBo) {
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Users users =new Users();
         users.setId(sid.nextShort());
         users.setUsername(userBo.getUsername());

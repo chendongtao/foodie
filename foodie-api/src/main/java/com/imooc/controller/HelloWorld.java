@@ -1,5 +1,7 @@
 package com.imooc.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,10 +11,12 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 public class HelloWorld {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorld.class);
 
 
     @GetMapping("/hello")
     public String sayHelloWold(){
+        LOGGER.info("info test 测试.....");
         return "hello 阿大你买再看鸟！！！";
     }
     @PostMapping("/postHello")
