@@ -58,4 +58,14 @@ public class UsersServiceImpl  implements UsersService {
         usersMapper.insert(users);
         return users;
     }
+
+    @Override
+    public Users login(UserBo userBo) {
+        Example example =new Example(Users.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username",userBo.getUsername());
+        criteria.andEqualTo("password",userBo.getPassword());
+        Users user = usersMapper.selectOneByExample(example);
+        return user;
+    }
 }
