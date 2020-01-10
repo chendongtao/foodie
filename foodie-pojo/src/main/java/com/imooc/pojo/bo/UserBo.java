@@ -7,7 +7,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserBo {
     @ApiModelProperty(value = "用户名",name = "username",required = true)
     private String username;
+    @ApiModelProperty(value = "密码",name = "password",required = true)
     private String password;
+    @ApiModelProperty(value = "确认密码",name = "confirmPassword",required = false)
     private String confirmPassword;
 
     public String getUsername() {

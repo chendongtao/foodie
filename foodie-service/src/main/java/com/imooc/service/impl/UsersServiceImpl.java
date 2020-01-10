@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -58,4 +59,15 @@ public class UsersServiceImpl  implements UsersService {
         usersMapper.insert(users);
         return users;
     }
+    @Override
+    public Users login( UserBo userBo){
+        Example example =new Example(Users.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username",userBo.getUsername());
+        criteria.andEqualTo("password",userBo.getPassword());
+        Users user = usersMapper.selectOneByExample(example);
+        return user;
+    }
+
+
 }
