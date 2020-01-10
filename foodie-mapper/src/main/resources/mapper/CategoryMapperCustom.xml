@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imooc.mapper.CategoryCustomMapper" >
+    <resultMap id="MyCategoryMap" type="com.imooc.pojo.vo.CategoryVO">
+        <id column="id" property="id"></id>
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="fatherId" property="fatherId" jdbcType="VARCHAR" />
+        <collection property="subCatList" ofType="com.imooc.pojo.vo.CategorySubVO">
+            <id column="subId" property="subId"></id>
+            <result column="subName" property="subName" jdbcType="VARCHAR" />
+            <result column="subType" property="subType" jdbcType="VARCHAR" />
+            <result column="subFatherId" property="subFatherId" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <select id="queryCategorySubList"  parameterType="int" resultMap="MyCategoryMap">
+        SELECT
+            f.id AS id,
+            f.`name` AS NAME,
+            f.type AS type,
+            f.father_id AS fatherId,
+            c.id AS subId,
+            c.NAME AS subName,
+            c.type AS subType,
+            c.father_id AS subFatherId
+        FROM
+            `category` f,
+            category c
+        WHERE
+            f.id = c.father_id
+            AND f.father_id = ${id};
+    </select>
+
+</mapper>
