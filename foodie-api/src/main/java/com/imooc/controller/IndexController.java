@@ -3,6 +3,7 @@ package com.imooc.controller;
 import com.imooc.pojo.Carousel;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.enums.YesOrNo;
+import com.imooc.pojo.vo.MyItemsVO;
 import com.imooc.service.CarouselService;
 import com.imooc.service.CategoryService;
 import com.imooc.utils.IMOOCJSONResult;
@@ -12,7 +13,9 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/index")
@@ -44,5 +47,14 @@ public class IndexController {
     public IMOOCJSONResult subCat(@ApiParam(required = true ,name = "rootCatId",value = "一级分类ID") @PathVariable("rootCatId") Integer rootCatId){
         List<Category> categoryList = categoryService.queryCategorySubList(rootCatId);
         return IMOOCJSONResult.ok(categoryList);
+    }
+
+    @GetMapping("/sixNewItems/{rootCatId}")
+    @ApiOperation(value = "首页滚轮向下懒加载商品分类和列表信息",notes = "首页滚轮向下懒加载商品分类和列表信息",httpMethod = "GET")
+    public IMOOCJSONResult queryMyItemsList(@PathVariable("rootCatId") String rootCatId){
+        Map map =new HashMap();
+        map.put("rootCatId",rootCatId);
+        List<MyItemsVO> myItemsVOS = categoryService.queryMyItemsList(map);
+        return IMOOCJSONResult.ok(myItemsVOS);
     }
 }
