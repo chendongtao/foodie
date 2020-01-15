@@ -1,3 +1,5 @@
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.imooc.Application;
 import com.imooc.controller.HelloWorld;
 import com.imooc.service.impl.TestTransactionImpl;
@@ -46,5 +48,14 @@ public class TestController {
     @Test
     public void testTransaction(){
         testTransactionImp.testTransaction();
+    }
+    @Test
+    public void testPageHelperPage(){
+        Page page =new Page();
+        page.setPageNum(1);
+        page.setPageSize(10);
+        Page page1 =page;
+        int pageNum = page1.getPageNum();
+        System.out.println(pageNum);
     }
 }
