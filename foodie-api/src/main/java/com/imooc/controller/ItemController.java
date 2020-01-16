@@ -8,11 +8,14 @@ import com.imooc.pojo.ItemsImg;
 import com.imooc.pojo.ItemsParam;
 import com.imooc.pojo.ItemsSpec;
 import com.imooc.pojo.vo.ItemCommentCountVO;
+import com.imooc.pojo.vo.ShopCatVO;
 import com.imooc.service.*;
 import com.imooc.utils.IMOOCJSONResult;
 import com.imooc.utils.PagedGridResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -116,6 +119,15 @@ public class ItemController {
         map.put("sort",sort);
         PagedGridResult pagedGridResult = itemService.searchItemsByThirCat(map, page, pageSize);
         return IMOOCJSONResult.ok(pagedGridResult);
+    }
+    @GetMapping("/refresh")
+    @ApiOperation(value = "根据商品规格ids获取购物车列表信息",notes ="根据商品规格ids获取购物车列表信息",httpMethod = "GET")
+    public IMOOCJSONResult refresh(@ApiParam(value = "itemSpecIds",example = "1001,1002,1004") @RequestParam String itemSpecIds){
+        if (StringUtils.isBlank(itemSpecIds)){
+            return IMOOCJSONResult.errorMsg(null);
+        }
+        List<ShopCatVO> shopCatVOS = itemService.queryItemsBySpecIds(itemSpecIds);
+        return IMOOCJSONResult.ok(shopCatVOS);
     }
 
 }

@@ -88,4 +88,24 @@
 
   </select>
 
+    <select id="queryItemsBySpecIds" parameterType="List" resultType="com.imooc.pojo.vo.ShopCatVO">
+        SELECT
+            it.id AS itemId,
+            it.item_name AS itemName,
+            img.url AS itemImgUrl,
+            spec.`name` AS specName,
+            spec.id as specId,
+            spec.price_discount AS priceDiscount,
+            spec.price_normal AS priceNormal
+        FROM
+            items_spec spec
+            LEFT JOIN items it ON spec.item_id = it.id
+            LEFT JOIN ( SELECT url, item_id FROM items_img WHERE is_main = 1 ) img ON it.id = img.item_id
+        WHERE
+            spec.id IN
+             <foreach collection="paramsList" item="specId" index="index" open="(" close=")" separator=",">
+                 #{specId}
+             </foreach>
+    </select>
+
 </mapper>

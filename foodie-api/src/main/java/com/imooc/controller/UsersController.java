@@ -67,7 +67,10 @@ public class UsersController {
             return IMOOCJSONResult.errorMsg("两次密码不一致");
         }
         Users user = usersService.createUsers(userBo);
-        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(user),300,true);
+        //5、注册成功后，将用户信息存至cookie中
+        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(user),3000,true);
+        //TODO 同步购物车数据
+
         return IMOOCJSONResult.ok(this.setNullProperties(user));
     }
 
@@ -86,7 +89,11 @@ public class UsersController {
         if (user==null){
             return IMOOCJSONResult.errorMsg("用户名或者密码不正确");
         }
-        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(user),    300,true);
+
+        //5、登录成功后，将用户信息存至cookie中
+        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(user),    3000,true);
+
+        //TODO 购物车同步
         return IMOOCJSONResult.ok(this.setNullProperties(user));
     }
 

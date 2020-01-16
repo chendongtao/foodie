@@ -8,6 +8,7 @@ import com.imooc.mapper.ItemsMapper;
 import com.imooc.pojo.Items;
 import com.imooc.pojo.vo.ItemCommentVO;
 import com.imooc.pojo.vo.SearchItemsVO;
+import com.imooc.pojo.vo.ShopCatVO;
 import com.imooc.service.ItemService;
 import com.imooc.utils.DesensitizationUtil;
 import com.imooc.utils.PagedGridResult;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +67,15 @@ public class ItemServiceImpl implements ItemService {
         PageInfo<SearchItemsVO> pageInfo =new PageInfo();
         PagedGridResult pagedGridResult = setPagedGridResult(list, pageInfo);
         return pagedGridResult;
+    }
+
+    @Override
+    public List<ShopCatVO> queryItemsBySpecIds(String specIds) {
+        String[] split = specIds.split(",");
+        List<String> list =new ArrayList();
+        Collections.addAll(list,split);
+        List<ShopCatVO> shopCatVOList = itemsCustomMapper.queryItemsBySpecIds(list);
+        return shopCatVOList;
     }
 
     private PagedGridResult setPagedGridResult(List<?> list ,PageInfo<?> pageInfo){

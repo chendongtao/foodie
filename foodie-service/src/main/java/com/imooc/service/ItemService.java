@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.imooc.pojo.Items;
 import com.imooc.pojo.vo.ItemCommentVO;
 import com.imooc.pojo.vo.SearchItemsVO;
+import com.imooc.pojo.vo.ShopCatVO;
 import com.imooc.utils.PagedGridResult;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface ItemService {
     PagedGridResult searchItems(Map map,Integer page,Integer pageSize);
 
     PagedGridResult searchItemsByThirCat(Map map,Integer page,Integer pageSize);
+
+    List<ShopCatVO> queryItemsBySpecIds(String specIds);
 }
