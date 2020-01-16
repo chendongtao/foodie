@@ -9,8 +9,8 @@
         <module name="foodie-api" />
         <module name="foodie-common" />
         <module name="foodie-mapper" />
-        <module name="foodie-pojo" />
         <module name="foodie-service" />
+        <module name="foodie-pojo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">

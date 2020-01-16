@@ -11,4 +11,5 @@ public interface AddressService {
 
     void addUserAddress(AddressBO addressBO);
 
+    void updateUserAddress(AddressBO addressBO);
 }

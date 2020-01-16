@@ -45,6 +45,29 @@ public class AddressController {
         return IMOOCJSONResult.ok();
     }
 
+    @PostMapping("/update")
+    @ApiOperation(value = "修改用户收获地址",notes = "修改用户收获地址",httpMethod = "POST")
+    public IMOOCJSONResult update(@RequestBody AddressBO addressBO){
+        String addressId = addressBO.getAddressId();
+        if (StringUtils.isBlank(addressId)){
+            return IMOOCJSONResult.errorMsg("地址id不能为空");
+        }
+        IMOOCJSONResult imoocjsonResult = checkAddress(addressBO);
+        if (imoocjsonResult.getStatus()!= HttpStatus.OK.value()){
+            return imoocjsonResult;
+        }
+        addressService.updateUserAddress(addressBO);
+        return IMOOCJSONResult.ok();
+    }
+
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除用户收获地址",notes = "删除用户收获地址",httpMethod = "POST")
+    public IMOOCJSONResult delete(String userId,String addressId){
+        return null;
+    }
+
+
+
     private IMOOCJSONResult checkAddress(AddressBO addressBO) {
         String receiver = addressBO.getReceiver();
         if (StringUtils.isBlank(receiver)) {
