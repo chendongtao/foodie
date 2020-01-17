@@ -63,7 +63,21 @@ public class AddressController {
     @PostMapping("/delete")
     @ApiOperation(value = "删除用户收获地址",notes = "删除用户收获地址",httpMethod = "POST")
     public IMOOCJSONResult delete(String userId,String addressId){
-        return null;
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)){
+            return IMOOCJSONResult.errorMsg("参数不能为空");
+        }
+        addressService.deleteAddress(userId,addressId);
+        return IMOOCJSONResult.ok();
+    }
+
+    @PostMapping("/setDefalut")
+    @ApiOperation(value = "设置默认收获地址",notes = "设置默认收获地址",httpMethod = "POST")
+    public IMOOCJSONResult setDefalut(String userId,String addressId){
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)){
+            return IMOOCJSONResult.errorMsg("参数不能为空");
+        }
+        addressService.setDefalut(userId,addressId);
+        return IMOOCJSONResult.ok();
     }
 
 

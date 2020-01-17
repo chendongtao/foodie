@@ -65,4 +65,31 @@ public class AddressServiceImpl implements AddressService {
         userAddress.setUpdatedTime(new Date());
         userAddressMapper.updateByPrimaryKeySelective(userAddress);
     }
+
+    @Override
+    public void deleteAddress(String userId, String addressId) {
+        UserAddress userAddress =new UserAddress();
+        userAddress.setId(addressId);
+        userAddress.setUserId(userId);
+        userAddressMapper.delete(userAddress);
+    }
+
+    @Override
+    public void setDefalut(String userId, String addressId) {
+        //取消默认地址
+        UserAddress setAddress =new UserAddress();
+        setAddress.setIsDefault(YesOrNo.NO.value);
+        Example example =new Example(UserAddress.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("isDefault",YesOrNo.YES.value);
+        userAddressMapper.updateByExampleSelective(setAddress,example);
+        //设置默认地址
+        setAddress =new UserAddress();
+        setAddress.setId(addressId);
+        setAddress.setUserId(userId);
+        setAddress.setIsDefault(YesOrNo.YES.value);
+        setAddress.setUpdatedTime(new Date());
+        userAddressMapper.updateByPrimaryKeySelective(setAddress);
+    }
 }
