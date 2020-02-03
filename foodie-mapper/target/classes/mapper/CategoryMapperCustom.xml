@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imooc.mapper.CategoryCustomMapper" >
+    <resultMap id="MyCategoryMap" type="com.imooc.pojo.vo.CategoryVO">
+        <id column="id" property="id"></id>
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="fatherId" property="fatherId" jdbcType="VARCHAR" />
+        <collection property="subCatList" ofType="com.imooc.pojo.vo.CategorySubVO">
+            <id column="subId" property="subId"></id>
+            <result column="subName" property="subName" jdbcType="VARCHAR" />
+            <result column="subType" property="subType" jdbcType="VARCHAR" />
+            <result column="subFatherId" property="subFatherId" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="MyItemsMap" type="com.imooc.pojo.vo.MyItemsVO">
+        <id column="rootCatId" property="rootCatId"></id>
+        <result column="rootCatName" property="rootCatName" />
+        <result column="slogan" property="slogan" />
+        <result column="catImage" property="catImage"/>
+        <result column="bgColor" property="bgColor"/>
+        <collection property="simpleItemList" ofType="com.imooc.pojo.vo.MyItemsImageVO">
+            <id column="itemId" property="itemId"></id>
+            <result column="itemName" property="itemName" />
+            <result column="itemUrl" property="itemUrl" />
+            <result column="createdTime" property="createdTime"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryCategorySubList"  parameterType="int" resultMap="MyCategoryMap">
+        SELECT
+            f.id AS id,
+            f.`name` AS NAME,
+            f.type AS type,
+            f.father_id AS fatherId,
+            c.id AS subId,
+            c.NAME AS subName,
+            c.type AS subType,
+            c.father_id AS subFatherId
+        FROM
+            `category` f
+		LEFT JOIN
+            category c
+        ON
+            f.id = c.father_id
+        WHERE
+            f.father_id = ${id};
+    </select>
+
+    <select id="queryMyItemsList" parameterType="Map" resultMap="MyItemsMap">
+        SELECT
+            f.id AS rootCatId,
+            f.`name` AS rootCatName,
+            f.slogan AS slogan,
+            f.cat_image AS catImage,
+            f.bg_color AS bgColor,
+            it.id AS itemId,
+            it.item_name AS itemName,
+            im.url AS itemUrl,
+            it.created_time AS createdTime
+        FROM
+            category f
+            LEFT JOIN items it ON f.id = it.root_cat_id
+            LEFT JOIN items_img im ON it.id =im.item_id
+        WHERE f.type =1 AND
+            it.root_cat_id =#{paramsMap.rootCatId}
+            AND im.is_main ='1'
+            ORDER BY
+            it.created_time DESC
+            LIMIT 0,6
+    </select>
+</mapper>

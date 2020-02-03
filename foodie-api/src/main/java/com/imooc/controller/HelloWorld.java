@@ -17,7 +17,7 @@ public class HelloWorld {
     @GetMapping("/hello")
     public String sayHelloWold(){
         LOGGER.info("info test 测试.....");
-        return "hello 阿大你买再看鸟！！！";
+        return "<P style=\"font-size:200px;color:orange\">阿大鲁下课鸟<P>";
     }
     @PostMapping("/postHello")
     public String sayHelloWold(String name){

@@ -8,5 +8,6 @@ public interface ItemImgService {
 
     List<ItemsImg> queryItemImgList(String itemId);
 
+    ItemsImg selectMainImgByParam(String itemId);
 
 }

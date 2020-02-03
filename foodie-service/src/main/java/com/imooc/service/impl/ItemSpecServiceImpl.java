@@ -23,4 +23,9 @@ public class ItemSpecServiceImpl implements ItemSpecService {
         criteria.andEqualTo("itemId",itemId);
         return itemsSpecMapper.selectByExample(example);
     }
+
+    @Override
+    public ItemsSpec selectItemsSpecByPrimaryKey(String id) {
+        return itemsSpecMapper.selectByPrimaryKey(id);
+    }
 }

@@ -92,4 +92,9 @@ public class AddressServiceImpl implements AddressService {
         setAddress.setUpdatedTime(new Date());
         userAddressMapper.updateByPrimaryKeySelective(setAddress);
     }
+
+    @Override
+    public UserAddress selectUserAddressByPrimaryKey(String id) {
+        return userAddressMapper.selectByPrimaryKey(id);
+    }
 }

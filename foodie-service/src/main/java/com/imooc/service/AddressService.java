@@ -16,4 +16,6 @@ public interface AddressService {
     void deleteAddress(String userId, String addressId);
 
     void setDefalut(String userId, String addressId);
+
+    UserAddress selectUserAddressByPrimaryKey(String id);
 }

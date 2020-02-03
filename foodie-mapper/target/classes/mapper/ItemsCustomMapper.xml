@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imooc.mapper.ItemsCustomMapper" >
+
+  <select id="queryItemComments" parameterType="Map" resultType="com.imooc.pojo.vo.ItemCommentVO">
+        SELECT
+        ic.comment_level as commentLevel,
+        ic.content as content,
+        ic.sepc_name as specName,
+        ic.created_time as createdTime,
+        u.face as userFace,
+        u.nickname as nickname
+        FROM
+            items_comments ic
+        LEFT JOIN
+            users u
+        ON
+            ic.user_id = u.id
+        where ic.item_id =#{itemId}
+        <if test="commentLevel != null and commentLevel != ''">
+          and comment_level =#{commentLevel}
+        </if>
+  </select>
+
+  <select id="searchItems" parameterType="Map" resultType="com.imooc.pojo.vo.SearchItemsVO">
+        SELECT
+            it.id AS itemId,
+            it.item_name AS itemName,
+            it.sell_counts AS sellCounts,
+            img.url AS imgUrl ,
+            tempSpec.price_discount AS price
+        FROM
+            items it
+            LEFT JOIN items_img img
+            ON it.id = img.item_id
+            LEFT JOIN
+            (SELECT item_id ,MIN(price_discount) price_discount FROM items_spec GROUP BY item_id) tempSpec
+            ON it.id =tempSpec.item_id
+        WHERE
+            img.is_main = 1
+        <if test="keywords !=null and keywords !=null">
+          and it.item_name like '%${keywords}%'
+        </if>
+        order by
+          <choose>
+            <when  test="sort == &quot;c&quot;">
+                sellCounts desc
+            </when>
+            <when  test="sort ==&quot;p&quot;">
+                price asc
+            </when>
+            <otherwise>
+              itemName asc
+            </otherwise>
+          </choose>
+
+  </select>
+
+  <select id="searchItemsByThirCat" parameterType="Map" resultType="com.imooc.pojo.vo.SearchItemsVO">
+        SELECT
+            it.id AS itemId,
+            it.item_name AS itemName,
+            it.sell_counts AS sellCounts,
+            img.url AS imgUrl ,
+            tempSpec.price_discount AS price
+        FROM
+            items it
+            LEFT JOIN items_img img
+            ON it.id = img.item_id
+            LEFT JOIN
+            (SELECT item_id ,MIN(price_discount) price_discount FROM items_spec GROUP BY item_id) tempSpec
+            ON it.id =tempSpec.item_id
+        WHERE
+            img.is_main = 1
+        and it.cat_id =#{catId}
+        order by
+          <choose>
+            <when  test="sort == &quot;c&quot;">
+                sellCounts desc
+            </when>
+            <when  test="sort ==&quot;p&quot;">
+                price asc
+            </when>
+            <otherwise>
+              itemName asc
+            </otherwise>
+          </choose>
+
+  </select>
+
+    <select id="queryItemsBySpecIds" parameterType="List" resultType="com.imooc.pojo.vo.ShopCatVO">
+        SELECT
+            it.id AS itemId,
+            it.item_name AS itemName,
+            img.url AS itemImgUrl,
+            spec.`name` AS specName,
+            spec.id as specId,
+            spec.price_discount AS priceDiscount,
+            spec.price_normal AS priceNormal
+        FROM
+            items_spec spec
+            LEFT JOIN items it ON spec.item_id = it.id
+            LEFT JOIN ( SELECT url, item_id FROM items_img WHERE is_main = 1 ) img ON it.id = img.item_id
+        WHERE
+            spec.id IN
+             <foreach collection="paramsList" item="specId" index="index" open="(" close=")" separator=",">
+                 #{specId}
+             </foreach>
+    </select>
+
+</mapper>
