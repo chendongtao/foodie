@@ -12,6 +12,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import org.apache.catalina.User;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,8 +32,8 @@ import java.util.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = Application.class)
 public class TestController {
     private MockMvc mockMvc;
 
@@ -63,7 +64,7 @@ public class TestController {
         int pageNum = page1.getPageNum();
         System.out.println(pageNum);
     }
-    @Test
+//    @Test
     public static void main(String[] args) throws Exception {
         String url ="http://localhost:8088/orders/testPostForObject";
         RestTemplate restTemplate =new RestTemplate();
@@ -91,6 +92,7 @@ public class TestController {
 //        s = s.substring(0,s.length() - 1);
 //        System.out.println(s);
     }
+
     public static String object2Xml(Object ro, Class<?> types) throws Exception {
         if (null == ro) {
             return null;
@@ -98,5 +100,40 @@ public class TestController {
         XStream xstream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
         xstream.alias("xml", types);
         return xstream.toXML(ro);
+    }
+    @Test
+    public void test01(){
+        String creditlimit = mergeUrl("http://", "creditlimit","wfClient/shake?id={0}&signature={1}&timestamp={2}&random={3}");
+        System.out.println(creditlimit);
+    }
+    public static  String mergeUrl(String... urls){
+        StringBuilder sb = new StringBuilder();
+        /*循环取出对应的url部分*/
+        for(String url : urls){
+
+            /*判断url部分是否为空，空就直接拼接下一个*/
+            if(StringUtils.isBlank(url)) continue;
+            /*判断是否是以“/”结尾，是的话就去掉这个结尾*/
+            if(url.endsWith("/")){
+                url = url.substring(0, url.length() - 1);
+            }
+
+            /*判断是否是第一次进来*/
+            if(StringUtils.isBlank(sb)){
+                sb.append(url);
+            }
+            else
+            {
+                /*判断是否是以“/”开始，是的话就直接进行连接，不是就加上*/
+                if(url.startsWith("/")){
+                    sb.append(url);
+                }
+                else
+                {
+                    sb.append("/").append(url);
+                }
+            }
+        }
+        return sb.toString();
     }
 }

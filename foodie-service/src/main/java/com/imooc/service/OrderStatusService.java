@@ -9,4 +9,6 @@ public interface OrderStatusService {
     void updateOrderStatus(OrderStatus orderStatus);
 
     OrderStatus selectOrderStatusByKey(String id);
+
+    void closeOrder();
 }

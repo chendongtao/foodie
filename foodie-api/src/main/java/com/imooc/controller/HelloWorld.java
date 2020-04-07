@@ -1,5 +1,6 @@
 package com.imooc.controller;
 
+import com.imooc.utils.IMOOCJSONResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,4 +24,5 @@ public class HelloWorld {
     public String sayHelloWold(String name){
         return "hello 阿大你买再看鸟！！！"+name;
     }
+
 }
