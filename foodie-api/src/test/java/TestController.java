@@ -28,6 +28,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -50,6 +52,72 @@ public class TestController {
 //        mockMvc.perform(MockMvcRequestBuilders.post("/postHello?name=cdt").accept(MediaType.APPLICATION_JSON_UTF8)).andDo(print());
         mockMvc.perform(MockMvcRequestBuilders.post("/postHello?name=cdt").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.content().string("cdt"));
+    }
+    @Test
+    public void testCalendar() throws ParseException {
+        String start ="2020-01-01";
+        String end ="2020-02-29";
+        SimpleDateFormat sf =new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate =sf.parse(start);
+        Date endDate =sf.parse(end);
+
+
+        int monthInterval = getMonthInterval(startDate, endDate);
+        System.out.println(monthInterval);
+
+    }
+    @Test
+    public void testListSub(){
+        List list=new ArrayList();
+        list.add("323");
+        list.add("3121223");
+        List list1 = list.subList(0, 1);
+        System.out.println(list1);
+    }
+    /**
+     * 获得日期是一年的第几周，返回值从1开始.
+     * 如果周日期跨年，则那周属于下一年的第一周
+     * 与mysql的YEARWEEK(CREATED_TIME,1)按周分组查询一致
+     * 已改为中国习惯，1 是Monday，而不是Sunday
+     */
+    public static int getWeekOfYear(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        cal.setTime(date);
+        return cal.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public static int getMonthInterval(Date start, Date end) {
+        if (start.after(end)) {
+            Date t = start;
+            start = end;
+            end = t;
+        }
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.setTime(start);
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTime(end);
+        Calendar temp = Calendar.getInstance();
+        temp.setTime(end);
+        temp.add(Calendar.DATE, 1);
+
+        int year = endCalendar.get(Calendar.YEAR)
+                - startCalendar.get(Calendar.YEAR);
+        int month = endCalendar.get(Calendar.MONTH)
+                - startCalendar.get(Calendar.MONTH);
+
+        if ((startCalendar.get(Calendar.DATE) == 1)
+                && (temp.get(Calendar.DATE) == 1)) {
+            return year * 12 + month + 1;
+        } else if ((startCalendar.get(Calendar.DATE) != 1)
+                && (temp.get(Calendar.DATE) == 1)) {
+            return year * 12 + month;
+        } else if ((startCalendar.get(Calendar.DATE) == 1)
+                && (temp.get(Calendar.DATE) != 1)) {
+            return year * 12 + month;
+        } else {
+            return (year * 12 + month - 1) < 0 ? 0 : (year * 12 + month);
+        }
     }
     @Test
     public void testTransaction(){
