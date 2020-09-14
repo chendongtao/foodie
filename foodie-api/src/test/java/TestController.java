@@ -204,4 +204,8 @@ public class TestController {
         }
         return sb.toString();
     }
+    @Test
+    public void testMethodClass(){
+
+    }
 }

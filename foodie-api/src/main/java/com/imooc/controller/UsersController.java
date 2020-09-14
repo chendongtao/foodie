@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("passport")
+@RequestMapping("/passport")
 @Api(value = "用户注册登录",tags = {"用于用户登录注册"})
 public class UsersController {
 
